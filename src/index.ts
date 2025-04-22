@@ -17,3 +17,5 @@ export * from './generators/generate-input-type';
 export * from './generators/generate-filter-type';
 export * from './generators/generate-sort-type';
 export * from './generators/generate-paging-input';
+
+export * from './schema/unified-schema';
