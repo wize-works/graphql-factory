@@ -53,7 +53,15 @@ export const generateQueryResolvers = ({
                         .select('*')
                         .eq('id', args.id)
                         .single();
-
+                        console.log(`🧪 Validating get${name} args...`, {
+                            type,
+                            idType,
+                            isNonNull: isNonNullType(idType),
+                            args: {
+                                id: { type: idType }
+                            }
+                        });
+                        
                     if (error) throw new Error(error.message);
                     return data;
                 });
