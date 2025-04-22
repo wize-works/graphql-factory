@@ -28,20 +28,32 @@ export function buildUnifiedGraphQLSchemaFromFolder(modelsDir: string): GraphQLS
         Object.assign(subscriptionFields, s);
     }
 
-    const query = new GraphQLObjectType({
-        name: 'Query',
-        fields: queryFields
-    });
+    const schemaConfig: any = {};
 
-    const mutation = new GraphQLObjectType({
-        name: 'Mutation',
-        fields: mutationFields
-    });
+    if (Object.keys(queryFields).length > 0) {
+        schemaConfig.query = new GraphQLObjectType({
+            name: 'Query',
+            fields: queryFields
+        });
+    }
 
-    const subscription = new GraphQLObjectType({
-        name: 'Subscription',
-        fields: subscriptionFields
-    });
+    if (Object.keys(mutationFields).length > 0) {
+        schemaConfig.mutation = new GraphQLObjectType({
+            name: 'Mutation',
+            fields: mutationFields
+        });
+    }
 
-    return new GraphQLSchema({ query, mutation, subscription });
+    if (Object.keys(subscriptionFields).length > 0) {
+        schemaConfig.subscription = new GraphQLObjectType({
+            name: 'Subscription',
+            fields: subscriptionFields
+        });
+    }
+
+    if (!schemaConfig.query && !schemaConfig.mutation && !schemaConfig.subscription) {
+        throw new Error('No GraphQL fields defined — cannot create schema.');
+    }
+
+    return new GraphQLSchema(schemaConfig);
 }
