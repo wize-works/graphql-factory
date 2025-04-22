@@ -1,0 +1,14 @@
+node_modules/
+dist/
+build/
+.env
+.env.*
+*.log
+
+# VSCode settings
+.vscode/
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+

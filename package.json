@@ -1,0 +1,113 @@
+{
+    "name": "@wizeworks/graphql-factory",
+    "version": "0.1.0",
+    "description": "Reusable GraphQL type generation, filtering, and resolver utilities for Supabase-powered APIs",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "private": false,
+    "readmeFilename": "README.md",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/wizeworks/graphql-factory.git"
+    },
+    "keywords": [
+        "graphql",
+        "supabase",
+        "typescript",
+        "postgrest"
+    ],
+    "homepage": "https://github.com/wizeworks/graphql-factory#readme",
+    "bugs": {
+        "url": "https://github.com/wizeworks/graphql-factory/issues"
+    },
+    "engines": {
+        "node": ">=14.0.0"
+    },
+    "files": [
+        "dist"
+    ],
+    "peerDependencies": {
+        "graphql": "^15.0.0 || ^16.0.0"
+    },
+    "dev": {
+        "graphql": "^15.0.0 || ^16.0.0"
+    },
+    "tsup": {
+        "entryPoints": [
+            "src/index.ts"
+        ],
+        "format": [
+            "cjs",
+            "esm"
+        ],
+        "dts": true,
+        "sourcemap": true,
+        "minify": false,
+        "clean": true,
+        "external": [
+            "@supabase/postgrest-js"
+        ]
+    },
+    "eslintConfig": {
+        "extends": [
+            "eslint:recommended",
+            "plugin:@typescript-eslint/recommended"
+        ],
+        "parser": "@typescript-eslint/parser",
+        "plugins": [
+            "@typescript-eslint"
+        ],
+        "rules": {
+            "@typescript-eslint/no-unused-vars": [
+                "error",
+                {
+                    "argsIgnorePattern": "^_"
+                }
+            ],
+            "@typescript-eslint/no-explicit-any": "warn"
+        }
+    },
+    "prettier": {
+        "singleQuote": true,
+        "trailingComma": "all",
+        "tabWidth": 4,
+        "semi": false
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
+    },
+    "lint-staged": {
+        "*.{js,ts}": [
+            "eslint --fix",
+            "git add"
+        ],
+        "*.{json,md}": [
+            "prettier --write",
+            "git add"
+        ]
+    },
+    "eslintIgnore": [
+        "dist"
+    ],
+    "scripts": {
+        "build": "tsup",
+        "dev": "tsup --watch",
+        "clean": "rm -rf dist"
+    },
+    "author": "WizeWorks",
+    "license": "MIT",
+    "dependencies": {
+        "@sentry/node": "^9.13.0",
+        "@sentry/profiling-node": "^9.13.0",
+        "@supabase/postgrest-js": "^1.19.4",
+        "@supabase/supabase-js": "^2.49.4",
+        "graphql-scalars": "^1.24.2",
+        "graphql-subscriptions": "^3.0.0"
+    },
+    "devDependencies": {
+        "tsup": "^7.2.0",
+        "typescript": "^5.0.0"
+    }
+}
