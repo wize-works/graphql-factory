@@ -1,4 +1,3 @@
-// src/generators/generate-sort-type.ts
 import { GraphQLEnumType, GraphQLInputObjectType } from 'graphql';
 import { capitalize } from '../utils/capitalize';
 

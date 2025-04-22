@@ -1,4 +1,3 @@
-// src/generators/generate-filter-type.ts
 import {
     GraphQLInputFieldConfigMap,
     GraphQLInputObjectType,

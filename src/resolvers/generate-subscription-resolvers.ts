@@ -1,4 +1,3 @@
-// src/resolvers/generate-subscription-resolvers.ts
 import { GraphQLObjectType } from 'graphql';
 import { PubSub } from 'graphql-subscriptions';
 

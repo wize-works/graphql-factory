@@ -1,4 +1,3 @@
-// src/types/map-scalars.ts
 import {
     GraphQLInt,
     GraphQLFloat,

@@ -1,4 +1,3 @@
-// src/generators/get-graphql-schema-for.ts
 import { GraphQLSchema, GraphQLObjectType } from 'graphql';
 import { generateObjectType } from './generate-object-type';
 import { generateInputType } from './generate-input-type';

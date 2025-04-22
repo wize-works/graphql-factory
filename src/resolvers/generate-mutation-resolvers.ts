@@ -1,4 +1,3 @@
-// src/resolvers/generate-mutation-resolvers.ts
 import { GraphQLInt, GraphQLNonNull } from 'graphql';
 import { supabase } from '../utils/supabase';
 import Sentry from '../utils/sentry';

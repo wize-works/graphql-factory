@@ -1,4 +1,3 @@
-// src/types/graphql-factory-options.ts
 import {
     GraphQLObjectType,
     GraphQLInputObjectType,
