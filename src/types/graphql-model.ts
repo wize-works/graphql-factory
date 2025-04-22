@@ -7,7 +7,8 @@ export type GraphQLFieldType =
     | 'datetime'
     | 'json'
     | 'id'
-    | 'text';
+    | 'text'
+    | 'uuid';
 
 export interface GraphQLFieldDefinition {
     type: GraphQLFieldType;
