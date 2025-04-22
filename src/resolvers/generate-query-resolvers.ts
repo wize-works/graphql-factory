@@ -4,6 +4,7 @@ import {
     GraphQLNonNull,
     GraphQLFieldConfigMap,
     GraphQLInputObjectType,
+    isNonNullType,
 } from 'graphql'
 import { hasScope } from '../utils/has-scope'
 import Sentry from '../utils/sentry'
@@ -30,11 +31,19 @@ export const generateQueryResolvers = ({
     const singular = name.toLowerCase()
     const table = singular + 's'
 
+
+    const idField = model.fields.id;
+    let idType = idField ? buildFieldType(idField, 'id', true) : null;
+    if (!idType) throw new Error(`Model ${name} is missing a valid 'id' field.`);
+    if (!isNonNullType(idType)) {
+        idType = new GraphQLNonNull(idType);
+    }
+
     const baseFields: GraphQLFieldConfigMap<any, AuthContext> = {
         [`get${name}`]: {
             type,
             args: {
-                id: { type: new GraphQLNonNull(buildFieldType(model.fields.id, 'id', true)) }
+                id: { type: idType }
             },
             resolve: async (_, args, context) => {
                 return await Sentry.startSpan({ name: `get${name}`, op: 'graphql.query' }, async () => {
