@@ -1,5 +1,5 @@
 import { GraphQLObjectType, GraphQLSchema } from 'graphql'
-import { getGraphQLSchemaForModel } from '../generators/get-graphql-schema-for'
+import { getGraphQLUnifiedSchemasForModel } from '../generators/get-graphql-schema-for'
 import { GraphQLModel } from '../types/graphql-model'
 import fs from 'fs'
 import path from 'path'
@@ -21,7 +21,7 @@ export function buildUnifiedGraphQLSchemaFromFolder(modelsDir: string): GraphQLS
         const modelName = path.basename(file, '.ts');
         const { default: model } = require(modelPath) as { default: GraphQLModel };
 
-        const { queryFields: q, mutationFields: m, subscriptionFields: s } = getGraphQLSchemaForModel(model, model.name || modelName);
+        const { queryFields: q, mutationFields: m, subscriptionFields: s } = getGraphQLUnifiedSchemasForModel(model, model.name || modelName);
 
         Object.assign(queryFields, q);
         Object.assign(mutationFields, m);

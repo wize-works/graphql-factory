@@ -9,7 +9,39 @@ import { generateMutationResolvers } from '../resolvers/generate-mutation-resolv
 import { generateSubscriptionResolvers } from '../resolvers/generate-subscription-resolvers';
 import { GraphQLModel } from '../types/graphql-model';
 
-export const getGraphQLSchemaForModel = (model: GraphQLModel, name: string) => {
+export const getGraphQLSchemaForModel = (model: GraphQLModel, name: string): GraphQLSchema => {
+    const objectType = generateObjectType(name, model);
+    const inputType = generateInputType(name, model);
+    const filterType = generateFilterType(name, model);
+    const sortType = generateSortType(name, model);
+    const pagingInput = generatePagingInput(name);
+
+    const query = new GraphQLObjectType({
+        name: 'Query',
+        fields: () => generateQueryResolvers({ name, model, type: objectType, filter: filterType, sort: sortType, paging: pagingInput })
+    });
+
+    const mutation = new GraphQLObjectType({
+        name: 'Mutation',
+        fields: () => generateMutationResolvers({ name, model, type: objectType, input: inputType })
+    });
+
+    const subscription = new GraphQLObjectType({
+        name: 'Subscription',
+        fields: () => generateSubscriptionResolvers({ name, type: objectType })
+    });
+    console.log('🧪 Query fields:', query.getFields());
+    console.log('🧪 Mutation fields:', mutation.getFields());
+    console.log('🧪 Subscription fields:', subscription.getFields());
+    
+    return new GraphQLSchema({
+        query,
+        mutation,
+        subscription
+    });
+}
+
+export const getGraphQLUnifiedSchemasForModel = (model: GraphQLModel, name: string) => {
     const objectType = generateObjectType(name, model);
     const inputType = generateInputType(name, model);
     const filterType = generateFilterType(name, model);
