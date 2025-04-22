@@ -36,7 +36,7 @@ export const generateQueryResolvers = ({
         [`get${name}`]: {
             type,
             args: {
-                id: { type: idType }
+                id: idType
             },
             resolve: async (_: any, args: any, context: AuthContext) => {
                 return await Sentry.startSpan({ name: `get${name}`, op: 'graphql.query' }, async () => {
