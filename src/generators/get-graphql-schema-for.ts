@@ -30,9 +30,6 @@ export const getGraphQLSchemaForModel = (model: GraphQLModel, name: string): Gra
         name: 'Subscription',
         fields: () => generateSubscriptionResolvers({ name, type: objectType })
     });
-    console.log('🧪 Query fields:', query.getFields());
-    console.log('🧪 Mutation fields:', mutation.getFields());
-    console.log('🧪 Subscription fields:', subscription.getFields());
     
     return new GraphQLSchema({
         query,
