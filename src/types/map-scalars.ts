@@ -19,5 +19,5 @@ export const scalarMap: Record<string, any> = {
     json: JSONObjectResolver,
     id: GraphQLID,
     text: GraphQLString, // alias for long-form strings
-    uuid: GraphQLID, // alias for UUIDs
+    uuid: GraphQLString, // alias for UUIDs
 };

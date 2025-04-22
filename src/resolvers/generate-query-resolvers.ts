@@ -10,6 +10,7 @@ import Sentry from '../utils/sentry'
 import { supabase } from '../utils/supabase'
 import { applyFilters } from '../utils/apply-filters'
 import { AuthContext } from '../types/auth-context'
+import { buildFieldType } from '../utils/build-field-type'
 
 export const generateQueryResolvers = ({
     type,
@@ -33,7 +34,7 @@ export const generateQueryResolvers = ({
         [`get${name}`]: {
             type,
             args: {
-                id: { type: new GraphQLNonNull(GraphQLInt) }
+                id: { type: new GraphQLNonNull(buildFieldType(model.fields.id, 'id', true)) }
             },
             resolve: async (_, args, context) => {
                 return await Sentry.startSpan({ name: `get${name}`, op: 'graphql.query' }, async () => {
