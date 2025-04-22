@@ -10,7 +10,7 @@ interface ModelSchema {
 }
 
 export function buildUnifiedGraphQLSchemaFromFolder(modelsDir: string): GraphQLSchema {
-    const modelFiles = fs.readdirSync(modelsDir).filter(f => f.endsWith('.ts'));
+    const modelFiles = fs.readdirSync(modelsDir).filter(f => f.endsWith('.ts') || f.endsWith('.js'));
 
     const queryFields: Record<string, any> = {};
     const mutationFields: Record<string, any> = {};
@@ -18,9 +18,17 @@ export function buildUnifiedGraphQLSchemaFromFolder(modelsDir: string): GraphQLS
 
     for (const file of modelFiles) {
         const modelPath = path.join(modelsDir, file);
-        const modelName = path.basename(file, '.ts');
+        const modelName = path.parse(file).name;
+        if (!fs.existsSync(modelPath)) {
+            console.error(`Model file not found: ${modelPath}`);
+            continue;
+        }
         const { default: model } = require(modelPath) as { default: GraphQLModel };
-
+        console.log(`Loading model: ${modelName}`);
+        if (!model) {
+            console.error(`Model not found in ${modelPath}`);
+            continue;
+        }
         const { queryFields: q, mutationFields: m, subscriptionFields: s } = getGraphQLUnifiedSchemasForModel(model, model.name || modelName);
 
         Object.assign(queryFields, q);
