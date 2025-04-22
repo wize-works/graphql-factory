@@ -15,22 +15,33 @@ export function buildUnifiedGraphQLSchemaFromFolder(modelsDir: string): GraphQLS
     const queryFields: Record<string, any> = {};
     const mutationFields: Record<string, any> = {};
     const subscriptionFields: Record<string, any> = {};
-
+    
+    if (!fs.existsSync(modelsDir)) {
+        console.warn(`[GraphQL] Models directory not found: ${modelsDir}`);
+        throw new Error('Models directory not found — cannot build GraphQL schema.');
+    }
+    
     for (const file of modelFiles) {
         const modelPath = path.join(modelsDir, file);
         const modelName = path.parse(file).name;
-        if (!fs.existsSync(modelPath)) {
-            console.error(`Model file not found: ${modelPath}`);
+    
+        let model: GraphQLModel | undefined;
+        try {
+            const mod = require(modelPath);
+            model = mod.default || mod;
+            console.log(`Loading model: ${modelName}`);
+        } catch (e) {
+            console.error(`[GraphQL] Failed to load model: ${modelPath}`, e);
             continue;
         }
-        const { default: model } = require(modelPath) as { default: GraphQLModel };
-        console.log(`Loading model: ${modelName}`);
+    
         if (!model) {
             console.error(`Model not found in ${modelPath}`);
             continue;
         }
+    
         const { queryFields: q, mutationFields: m, subscriptionFields: s } = getGraphQLUnifiedSchemasForModel(model, model.name || modelName);
-
+    
         Object.assign(queryFields, q);
         Object.assign(mutationFields, m);
         Object.assign(subscriptionFields, s);
