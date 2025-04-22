@@ -6,6 +6,8 @@ export * from './types/graphql-factory-options';
 
 export * from './utils/emit-subscription-event';
 export * from './utils/apply-filters';
+export * from './utils/sentry';
+export * from './utils/supabase';
 
 export * from './resolvers/generate-subscription-resolvers';
 export { pubsub } from './resolvers/generate-subscription-resolvers';
@@ -17,3 +19,5 @@ export * from './generators/generate-sort-type';
 export * from './generators/generate-paging-input';
 
 export * from './schema/unified-schema';
+
+export * from './types/auth-context';
