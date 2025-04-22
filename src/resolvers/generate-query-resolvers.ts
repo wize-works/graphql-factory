@@ -1,5 +1,5 @@
 // src/resolvers/generate-query-resolvers.ts
-import { GraphQLInt, GraphQLList, GraphQLNonNull } from 'graphql';
+import { GraphQLInt, GraphQLList, GraphQLNonNull, isNonNullType } from 'graphql';
 import { supabase } from '../utils/supabase';
 import Sentry from '../utils/sentry';
 import { AuthContext } from '../types/auth-context';
@@ -26,14 +26,17 @@ export const generateQueryResolvers = ({
     const table = singular + 's';
 
     const idField = model.fields.id;
-    const idType = idField ? buildFieldType(idField, 'id', true) : null;
+    let idType = idField ? buildFieldType(idField, 'id', true) : null;
     if (!idType) throw new Error(`Model ${name} is missing a valid 'id' field.`);
+    if (!isNonNullType(idType)) {
+        idType = new GraphQLNonNull(idType);
+    }
 
     return {
         [`get${name}`]: {
             type,
             args: {
-                id: { type: new GraphQLNonNull(idType) }
+                id: { type: idType }
             },
             resolve: async (_: any, args: any, context: AuthContext) => {
                 return await Sentry.startSpan({ name: `get${name}`, op: 'graphql.query' }, async () => {
