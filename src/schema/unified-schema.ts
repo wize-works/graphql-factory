@@ -24,17 +24,35 @@ export function buildUnifiedGraphQLSchemaFromFolder(modelsDir: string): GraphQLS
         const modelSchema = getGraphQLSchemaForModel(model, model.name || modelName);
 
         const queryType = modelSchema.getQueryType();
+        if (queryType) {
+            Object.assign(queryFields, queryType.getFields());
+        }
+
         const mutationType = modelSchema.getMutationType();
+        if (mutationType) {
+            Object.assign(mutationFields, mutationType.getFields());
+        }
+
         const subscriptionType = modelSchema.getSubscriptionType();
-        
-        if (queryType) Object.assign(queryFields, queryType.getFields());
-        if (mutationType) Object.assign(mutationFields, mutationType.getFields());
-        if (subscriptionType) Object.assign(subscriptionFields, subscriptionType.getFields());
+        if (subscriptionType) {
+            Object.assign(subscriptionFields, subscriptionType.getFields());
+        }
     }
 
-    return new GraphQLSchema({
-        query: new GraphQLObjectType({ name: 'Query', fields: queryFields }),
-        mutation: new GraphQLObjectType({ name: 'Mutation', fields: mutationFields }),
-        subscription: new GraphQLObjectType({ name: 'Subscription', fields: subscriptionFields })
-    })
+    const query = new GraphQLObjectType({
+        name: 'Query',
+        fields: queryFields
+    });
+
+    const mutation = new GraphQLObjectType({
+        name: 'Mutation',
+        fields: mutationFields
+    });
+
+    const subscription = new GraphQLObjectType({
+        name: 'Subscription',
+        fields: subscriptionFields
+    });
+
+    return new GraphQLSchema({ query, mutation, subscription });
 }
