@@ -1,4 +1,3 @@
-// src/generators/generate-input-type.ts
 import { GraphQLInputFieldConfigMap, GraphQLInputObjectType } from 'graphql';
 import { buildFieldType } from '../utils/build-field-type';
 import { capitalize } from '../utils/capitalize';

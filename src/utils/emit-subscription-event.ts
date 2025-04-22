@@ -1,4 +1,3 @@
-// src/utils/emit-subscription-event.ts
 import { pubsub } from '../resolvers/generate-subscription-resolvers';
 import { capitalize } from './capitalize';
 

@@ -1,4 +1,3 @@
-// src/generators/get-graphql-types-for.ts
 import { generateObjectType } from './generate-object-type';
 import { generateInputType } from './generate-input-type';
 import { generateFilterType } from './generate-filter-type';

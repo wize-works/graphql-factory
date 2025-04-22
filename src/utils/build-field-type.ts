@@ -1,4 +1,3 @@
-// src/utils/build-field-type.ts
 import {
     GraphQLList,
     GraphQLNonNull,

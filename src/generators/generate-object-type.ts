@@ -1,4 +1,3 @@
-// src/generators/generate-object-type.ts
 import { GraphQLFieldConfigMap, GraphQLObjectType } from 'graphql';
 import { buildFieldType } from '../utils/build-field-type';
 import { capitalize } from '../utils/capitalize';

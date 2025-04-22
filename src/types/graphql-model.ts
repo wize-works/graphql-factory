@@ -1,4 +1,3 @@
-// src/types/graphql-model.ts
 export type GraphQLFieldType =
     | 'int'
     | 'float'

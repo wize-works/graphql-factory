@@ -1,4 +1,3 @@
-// src/utils/apply-filters.ts
 import { PostgrestFilterBuilder } from '@supabase/postgrest-js';
 
 export const applyFilters = <T extends Record<string, unknown>>(

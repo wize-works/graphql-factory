@@ -1,4 +1,3 @@
-// src/types/map-enum-type.ts
 import { GraphQLEnumType } from 'graphql';
 
 const enumCache: Record<string, GraphQLEnumType> = {};

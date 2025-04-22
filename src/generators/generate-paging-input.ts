@@ -1,4 +1,3 @@
-// src/generators/generate-paging-input.ts
 import { GraphQLInputObjectType, GraphQLInt } from 'graphql';
 import { capitalize } from '../utils/capitalize';
 

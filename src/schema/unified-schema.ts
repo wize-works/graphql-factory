@@ -1,4 +1,3 @@
-// src/schema/unified-schema.ts
 import { GraphQLObjectType, GraphQLSchema } from 'graphql'
 import { getGraphQLSchemaForModel } from '../generators/get-graphql-schema-for'
 import { GraphQLModel } from '../types/graphql-model'
