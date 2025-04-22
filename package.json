@@ -4,8 +4,26 @@
     "description": "Reusable GraphQL type generation, filtering, and resolver utilities for Supabase-powered APIs",
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts",
-    "private": false,
     "readmeFilename": "README.md",
+    "private": false,
+    "publishConfig": {
+        "access": "public"
+    },
+    "exports": {
+        ".": {
+            "require": "./dist/index.js",
+            "import": "./dist/index.mjs",
+            "types": "./dist/index.d.ts"
+        }
+    },
+    "typesVersions": {
+        "*": {
+            "*": [
+                "dist/index.d.ts"
+            ]
+        }
+    },
+    "sideEffects": false,
     "repository": {
         "type": "git",
         "url": "git+https://github.com/wize-works/graphql-factory.git"
