@@ -34,6 +34,15 @@ export const generateMutationResolvers = ({
                     const { tenantId } = context;
                     await supabase.rpc('set_config', { key: 'app.tenant_id', value: tenantId });
 
+                    const input = { ...args.input };
+                    for (const [key, field] of Object.entries(model.fields) as [string, { defaultValue?: any }][]) {
+                        if (input[key] === undefined && field.defaultValue !== undefined) {
+                            input[key] = typeof field.defaultValue === 'function'
+                                ? field.defaultValue()
+                                : field.defaultValue;
+                        }
+                    }
+                    
                     const { data, error } = await supabase
                         .schema('api')
                         .from(table)
