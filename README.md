@@ -13,13 +13,69 @@
 
 ## ✨ Overview
 
-The **WizeWorks GraphQL API** is a multi-tenant, Supabase-backed API built with **Fastify**, **Mercurius**, and modern tooling for observability and traceability via **Sentry**.
-
-> This API is designed to serve as a backend foundation for WizeWorks SaaS apps.
+`@wizeworks/graphql-factory` provides a dynamic, auto-generating GraphQL schema builder tailored for Supabase and PostgREST backends. It supports filtering, sorting, pagination, subscriptions, and multi-tenant authorization out of the box.
 
 ---
 
-## 🔧 Tech Stack
+## 📦 Installation
+
+```bash
+npm install @wizeworks/graphql-factory
+```
+
+---
+
+## 🔧 Usage
+
+### 📁 1. Define Your Model
+```ts
+// src/models/comment.ts
+import { GraphQLModel } from '@wizeworks/graphql-factory';
+
+const CommentModel: GraphQLModel = {
+  name: 'Comment',
+  fields: {
+    id: { type: 'uuid', required: true },
+    postId: { type: 'string', required: true },
+    content: { type: 'string', required: true },
+    createdAt: { type: 'datetime', required: true },
+    updatedAt: { type: 'datetime', required: true },
+    // additional fields...
+  }
+};
+
+export default CommentModel;
+```
+
+### ⚙️ 2a. Generate a Schema for One Model
+```ts
+import { getGraphQLSchemaForModel } from '@wizeworks/graphql-factory';
+import CommentModel from './models/comment';
+
+const schema = getGraphQLSchemaForModel(CommentModel, 'Comment');
+```
+
+### ⚙️ 2b. Load All Models from a Folder
+```ts
+import { buildUnifiedGraphQLSchemaFromFolder } from '@wizeworks/graphql-factory';
+import path from 'path';
+
+const schema = await buildUnifiedGraphQLSchemaFromFolder({
+  modelPath: path.join(__dirname, './models'),
+});
+```
+> 🔍 This will auto-import all `.ts` or `.js` model files in the folder and stitch them into a unified schema under a single GraphQL instance.
+
+
+### 🚀 3. Environment Setup
+Make sure the following environment variables are available at runtime:
+
+Create a `.env` file based on `.env.example`:
+```env
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_KEY=your-service-role-key
+SENTRY_DSN=https://examplePublicKey@o0.ingest.sentry.io/0
+```
 
 | Tool             | Purpose                                   |
 |------------------|-------------------------------------------|
@@ -43,6 +99,14 @@ The **WizeWorks GraphQL API** is a multi-tenant, Supabase-backed API built with 
 - 🧪 Easy local development with `.env` and mock RLS
 - 🧩 Unified schema generation with auto-discovery of models
 - 🗂️ Filtering, sorting, and pagination built-in
+- 🔁 Auto-generates full CRUD queries/mutations
+- 🔍 Filtering (`_eq`, `_neq`, `_contains`, etc.)
+- 🔃 Sorting and Pagination
+- 🔐 Multi-tenant authorization via `context.tenantId`
+- 📡 GraphQL Subscriptions via `graphql-subscriptions`
+- 🧹 Unified schema with per-model modularity
+- 🧪 Type-safe GraphQL generation with model-first design
+- 📊 Sentry tracing integration
 
 ---
 
@@ -100,51 +164,6 @@ Run Node:
 ```bash
 npm run dev
 ```
-
----
-
-### 2. Kubernetes Deployment
-
-This repo includes production-ready Kubernetes manifests in the `deployment/` folder.
-
-```bash
-kubectl apply -f deployment/deployment.yaml
-kubectl apply -f deployment/service.yaml
-kubectl apply -f deployment/ingress.yaml
-```
-
----
-
-### 3. GitHub Actions (CI/CD)
-
-GitHub Actions will auto-deploy on push to `main`.
-
-You’ll need to configure the following secrets in your GitHub repository:
-
-| Secret Name         | Description                                 |
-|---------------------|---------------------------------------------|
-| `AKS_CLUSTER`       | AKS Cluster Name                            |
-| `ACR_NAME`          | Container registry URL                      |
-| `IMAGE_NAME`        | Image name (`e.g., wize-example`)           |
-| `SUPABASE_URL`      | Supabase URL                                |
-| `SUPABASE_KEY`      | Supabase Key                                |
-| `SENTRY_DSN`        | Sentry DSN                                  |
-
-You can customize these in `.github/workflows/deploy.yml`.
-
----
-
-### 🔁 Commit Versioning Requirement
-
-Before pushing commits to `development`, apply a version bump using one of the following:
-
-```bash
-npm run patchversion   # For patches
-npm run minorversion   # For minor feature additions
-npm run majorversion   # For breaking changes
-```
-
-This ensures semantic versioning is maintained via the `version` field in `package.json`.
 
 ---
 
