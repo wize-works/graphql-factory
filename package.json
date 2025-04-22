@@ -8,7 +8,7 @@
     "readmeFilename": "README.md",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/wizeworks/graphql-factory.git"
+        "url": "git+https://github.com/wize-works/graphql-factory.git"
     },
     "keywords": [
         "graphql",
@@ -16,9 +16,9 @@
         "typescript",
         "postgrest"
     ],
-    "homepage": "https://github.com/wizeworks/graphql-factory#readme",
+    "homepage": "https://github.com/wize-works/graphql-factory#readme",
     "bugs": {
-        "url": "https://github.com/wizeworks/graphql-factory/issues"
+        "url": "https://github.com/wize-works/graphql-factory/issues"
     },
     "engines": {
         "node": ">=14.0.0"

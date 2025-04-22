@@ -69,4 +69,4 @@ This package expects your app to include:
 
 ## 📚 License
 
-MIT © [WizeWorks](https://github.com/wizeworks)
+MIT © [WizeWorks](https://github.com/wize-works)
