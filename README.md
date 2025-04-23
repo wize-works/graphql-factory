@@ -137,7 +137,7 @@ npm run dev
 ```
 
 Access GraphQL Playground at:  
-👉 `http://localhost:3000/graphiql`
+👉 `http://localhost/graphql`
 
 ---
 

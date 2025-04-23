@@ -52,7 +52,7 @@ export const generateQueryResolvers = ({
                     }
 
                     const { tenantId } = context
-                    await supabase.rpc('set_config', { key: 'app.tenant_id', value: tenantId })
+                    await supabase.rpc('set_config', { key: 'app.tenantId', value: tenantId })
 
                     const { data, error } = await supabase
                         .schema('api')
@@ -80,7 +80,7 @@ export const generateQueryResolvers = ({
                     }
 
                     const { tenantId } = context
-                    await supabase.rpc('set_config', { key: 'app.tenant_id', value: tenantId })
+                    await supabase.rpc('set_config', { key: 'app.tenantId', value: tenantId })
 
                     let query = supabase.schema('api').from(table).select('*')
 
