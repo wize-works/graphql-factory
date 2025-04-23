@@ -5,13 +5,14 @@ import {
     GraphQLFieldConfigMap,
     GraphQLInputObjectType,
     isNonNullType,
-} from 'graphql'
-import { hasScope } from '../utils/has-scope'
-import Sentry from '../utils/sentry'
-import { supabase } from '../utils/supabase'
-import { applyFilters } from '../utils/apply-filters'
-import { AuthContext } from '../types/auth-context'
-import { buildFieldType } from '../utils/build-field-type'
+    GraphQLObjectType,
+} from 'graphql';
+import { hasScope } from '../utils/has-scope';
+import Sentry from '../utils/sentry';
+import { supabase } from '../utils/supabase';
+import { applyFilters } from '../utils/apply-filters';
+import { AuthContext } from '../types/auth-context';
+import { buildFieldType } from '../utils/build-field-type';
 
 export const generateQueryResolvers = ({
     type,
@@ -28,8 +29,8 @@ export const generateQueryResolvers = ({
     model: any
     name: string
 }): GraphQLFieldConfigMap<any, AuthContext> => {
-    const singular = name.toLowerCase()
-    const table = singular + 's'
+    const singular = name.toLowerCase();
+    const table = singular + 's';
 
 
     const idField = model.fields.id;
@@ -38,6 +39,14 @@ export const generateQueryResolvers = ({
     if (!isNonNullType(idType)) {
         idType = new GraphQLNonNull(idType);
     }
+
+    const ListResultType = new GraphQLObjectType({
+        name: `${name}ListResult`,
+        fields: {
+            count: { type: GraphQLInt },
+            data: { type: new GraphQLList(type) }
+        }
+    });
 
     const baseFields: GraphQLFieldConfigMap<any, AuthContext> = {
         [`get${name}`]: {
@@ -48,26 +57,26 @@ export const generateQueryResolvers = ({
             resolve: async (_, args, context) => {
                 return await Sentry.startSpan({ name: `get${name}`, op: 'graphql.query' }, async () => {
                     if (!hasScope(context, `${singular}:read`)) {
-                        throw new Error(`Unauthorized: missing ${singular}:read scope`)
+                        throw new Error(`Unauthorized: missing ${singular}:read scope`);
                     }
 
                     const { tenantId } = context
-                    await supabase.rpc('set_config', { key: 'app.tenantId', value: tenantId })
+                    await supabase.rpc('set_config', { key: 'app.tenantId', value: tenantId });
 
                     const { data, error } = await supabase
                         .schema('api')
                         .from(table)
                         .select('*')
                         .eq('id', args.id)
-                        .single()
+                        .single();
 
-                    if (error) throw new Error(error.message)
-                    return data
+                    if (error) throw new Error(error.message);
+                    return data;
                 })
             }
         },
         [`list${name}s`]: {
-            type: new GraphQLList(type),
+            type: ListResultType,
             args: {
                 ...(filter && { filter: { type: filter } }),
                 ...(sort && { sort: { type: sort } }),
@@ -76,16 +85,16 @@ export const generateQueryResolvers = ({
             resolve: async (_, args, context) => {
                 return await Sentry.startSpan({ name: `list${name}s`, op: 'graphql.query' }, async () => {
                     if (!hasScope(context, `${singular}:read`)) {
-                        throw new Error(`Unauthorized: missing ${singular}:read scope`)
+                        throw new Error(`Unauthorized: missing ${singular}:read scope`);
                     }
 
-                    const { tenantId } = context
-                    await supabase.rpc('set_config', { key: 'app.tenantId', value: tenantId })
+                    const { tenantId } = context;
+                    await supabase.rpc('set_config', { key: 'app.tenantId', value: tenantId });
 
-                    let query = supabase.schema('api').from(table).select('*')
+                    let query = supabase.schema('api').from(table).select('*');
 
                     if (args.filter)
-                        query = applyFilters(query, args.filter, model.fields)
+                        query = applyFilters(query, args.filter, model.fields);
 
                     let countQuery = supabase.schema('api').from(table).select('id', { count: 'exact' });
                     if (args.filter) {
@@ -95,16 +104,16 @@ export const generateQueryResolvers = ({
 
                     if (args.sort) {
                         for (const [field, direction] of Object.entries(args.sort)) {
-                            query = query.order(field, { ascending: direction === 'asc' })
+                            query = query.order(field, { ascending: direction === 'asc' });
                         }
                     }
                     if (args.paging) {
-                        const { limit = 20, offset = 0 } = args.paging
-                        query = query.range(offset, offset + limit - 1)
+                        const { limit = 20, offset = 0 } = args.paging;
+                        query = query.range(offset, offset + limit - 1);
                     }
 
-                    const { data, error } = await query
-                    if (error) throw new Error(error.message)
+                    const { data, error } = await query;
+                    if (error) throw new Error(error.message);
                     return { count, data };
                 })
             }
