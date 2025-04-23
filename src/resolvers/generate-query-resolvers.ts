@@ -84,7 +84,15 @@ export const generateQueryResolvers = ({
 
                     let query = supabase.schema('api').from(table).select('*')
 
-                    if (args.filter) query = applyFilters(query, args.filter, model.fields)
+                    if (args.filter)
+                        query = applyFilters(query, args.filter, model.fields)
+
+                    let countQuery = supabase.schema('api').from(table).select('id', { count: 'exact' });
+                    if (args.filter) {
+                        countQuery = applyFilters(countQuery, args.filter, model.fields);
+                    }
+                    const { count } = await countQuery;
+
                     if (args.sort) {
                         for (const [field, direction] of Object.entries(args.sort)) {
                             query = query.order(field, { ascending: direction === 'asc' })
@@ -97,7 +105,7 @@ export const generateQueryResolvers = ({
 
                     const { data, error } = await query
                     if (error) throw new Error(error.message)
-                    return data
+                    return { count, data };
                 })
             }
         }
