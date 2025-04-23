@@ -31,7 +31,7 @@ export const generateMutationResolvers = ({
                     }
 
                     const { tenantId } = context;
-                    await supabase.rpc('set_config', { key: 'app.tenant_id', value: tenantId });
+                    await supabase.rpc('set_config', { key: 'app.tenantId', value: tenantId });
 
                     const input = { ...args.input };
                     for (const [key, field] of Object.entries(model.fields) as [string, { defaultValue?: any }][]) {
@@ -45,7 +45,7 @@ export const generateMutationResolvers = ({
                     const { data, error } = await supabase
                         .schema('api')
                         .from(table)
-                        .insert([{ ...args.input, tenant_id: tenantId }])
+                        .insert([{ ...args.input, tenantId: tenantId }])
                         .select()
                         .single();
 
@@ -72,7 +72,7 @@ export const generateMutationResolvers = ({
                     }
 
                     const { tenantId } = context;
-                    await supabase.rpc('set_config', { key: 'app.tenant_id', value: tenantId });
+                    await supabase.rpc('set_config', { key: 'app.tenantId', value: tenantId });
 
                     const { data, error } = await supabase
                         .schema('api')
@@ -103,7 +103,7 @@ export const generateMutationResolvers = ({
                     }
 
                     const { tenantId } = context;
-                    await supabase.rpc('set_config', { key: 'app.tenant_id', value: tenantId });
+                    await supabase.rpc('set_config', { key: 'app.tenantId', value: tenantId });
 
                     const { data, error } = await supabase
                         .schema('api')
